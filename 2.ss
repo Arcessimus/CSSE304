@@ -14,14 +14,25 @@
 (define range
   (lambda (m n)
     (if (< m n)
-      cons(m (range(+ 1 m, n))))
+      cons(m (range((+ 1 m) n))))
     (else '())))
     
 (define set?
   (lambda (list)
+    [cond ((null? list) #t)
+          ((contains? cdr(list) car(list)) #f)
+          (else set? cdr(list))]))
+
+(define contains?
+  (lambda (list n)
+    [cond ((null? list) #f)
+          (= n car(list) #t)
+          (else contains? cdr(list) n)]))
     
 (define sum-of-squares
   (lambda (lon)
+    (if (null? lon) 0)
+    (+ (^ 2 car(lon)) sum-of-squares(cdr(lon)))))
   
 (define make-vec-from-points
   (lambda (p1 p2)
