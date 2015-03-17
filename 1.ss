@@ -6,7 +6,7 @@
   (lambda (interval n)
     [cond(((< n (car(interval)))#f)
           ((> n (cdr(interval)))#f)
-          (else #t))])))
+          (else #t))]))
 
 (define interval-intersects?
   (lambda (i1 i2)
@@ -24,9 +24,9 @@
         (if( < (cdr(i1)) (cdr(i2)))
           define y cdr(i1))
         (else define y cdr(i2))
-         cons(x y))
+         cons(x y)
           
-    (else '(i1 i2)))   
+    (else '(i1 i2))))   
 
 (define divisible-by-7?
   (lambda (n)

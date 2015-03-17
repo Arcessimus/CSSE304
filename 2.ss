@@ -36,12 +36,15 @@
   
 (define make-vec-from-points
   (lambda (p1 p2)
+    (vector ([- car(p1) car(p2)] [- cadr(p1) cadr(p2)] [- cddr(p1) cddr(p2)]))))
     
 (define dot-product
   (lambda (v1 v2)
+    (+ (* car(v1) car(v2)) + (* cadr(v1) cadr(v2)) (* cdr(v1) cdr(v2)))))
     
 (define vec-length
   (lambda (v)
+    sqrt(+ (^ car(v) 2) + (^ cadr(v) 2) (^ cdr(v) 2))))
     
 (define distance
   (lambda (p1 p2)
@@ -50,8 +53,15 @@
 (define cross-product
   (lambda (v1 v2)
     
+    
 (define parallel?
   (lambda (v1 v2)
+    (if (= arccos(/ dot-product(v1 v2) (* vec-length(v1) vec-length(v2))) 0) #t)
+	(else #f)))
     
 (define collinear?
   (lambda (p1 p2 p3)
+    let v1 (make-vec-from-points(p1 p2))
+	let v2 (make-vec-from-points(p1 p3))
+	if (parallel?(v1 v2) #t)
+	else (#f)))
