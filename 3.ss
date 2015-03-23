@@ -1,5 +1,5 @@
-(define nearest-point
-  (lambda (p list-of-points)
+;(define nearest-point
+;  (lambda (p list-of-points)
     
 (define union
   (lambda (s1 s2)

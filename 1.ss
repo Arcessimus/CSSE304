@@ -17,16 +17,14 @@
 (define interval-union
   (lambda (i1 i2)
     (if (interval-intersects? (i1 i2))
-        (if (< car(i1) car(i2)) 
-           let x car(i1)))
-        (else let x car(i2))
+        (if (< car(i1) car(i2)) let x car(i1)
+			let x car(i2))
         
-        (if( < cdr(i1) cdr(i2))
-          let y cdr(i1))
-        (else let y cdr(i2))
+        (if( < cdr(i1) cdr(i2)) let y cdr(i1)
+			let y cdr(i2))
          cons(x y)
           
-    (else '(i1 i2))))   
+    '(i1 i2))))   
 
 (define divisible-by-7?
   (lambda (n)
