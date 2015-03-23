@@ -17,12 +17,12 @@
 (define interval-union
   (lambda (i1 i2)
     (if (interval-intersects? (i1 i2))
-        (if (< car(i1) car(i2)) let x car(i1)
-			let x car(i2))
+        (if (< car(i1) car(i2)) define x car(i1)
+			define x car(i2))
         
-        (if( < cdr(i1) cdr(i2)) let y cdr(i1)
-			let y cdr(i2))
-         cons(x y)
+        (if( < cdr(i1) cdr(i2)) define y cdr(i1)
+			define y cdr(i2))
+         '(x y)
           
     '(i1 i2))))   
 
@@ -32,8 +32,8 @@
 
 (define Ends-with-7?
   (lambda (n)
-    (if(= (modulo((- n 7) 10)) 0) #t)
-    (else #f)))
+    (if(eq? (modulo((- n 7) 10)) 0) #t
+     #f)))
 
 (define 1st
   (lambda (plst)
