@@ -40,11 +40,11 @@
     
 (define dot-product
   (lambda (v1 v2)
-    (+ (* car(v1) car(v2)) + (* cadr(v1) cadr(v2)) (* cdr(v1) cdr(v2)))))
+    (+ [* (vector-ref v1 0) (vector-ref v2 0)] + [* (vector-ref v1 1) (vector-ref v2 1)] [* (vector-ref v1 2) (vector-ref v2 2)])))
     
 (define vec-length
   (lambda (v)
-    sqrt(+ (^ car(v) 2) + (^ cadr(v) 2) (^ cdr(v) 2))))
+    sqrt(+ (^ (vector-ref v 0) 2) + (^ (vector-ref v 1) 2) (^ (vector-ref v 2) 2))))
     
 (define distance
   (lambda (p1 p2)
