@@ -44,7 +44,7 @@
     
 (define vec-length
   (lambda (v)
-    sqrt(+ (^ (vector-ref v 0) 2) + (^ (vector-ref v 1) 2) (^ (vector-ref v 2) 2))))
+    sqrt(+ (expt (vector-ref v 0) 2) + (expt (vector-ref v 1) 2) (expt (vector-ref v 2) 2))))
     
 (define distance
   (lambda (p1 p2)
@@ -56,12 +56,12 @@
     
 (define parallel?
   (lambda (v1 v2)
-    (if (= arccos(/ dot-product(v1 v2) (* vec-length(v1) vec-length(v2))) 0) #t)
-	(else #f)))
+    (if (eq? acos(/ dot-product(v1 v2) (* vec-length(v1) vec-length(v2))) 0) #t
+	#f))
     
 (define collinear?
   (lambda (p1 p2 p3)
     let v1 (make-vec-from-points(p1 p2))
 	let v2 (make-vec-from-points(p1 p3))
-	if (parallel?(v1 v2) #t)
-	else (#f)))
+	(if (parallel?(v1 v2) #t)
+	#f)))
