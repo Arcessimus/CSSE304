@@ -16,15 +16,15 @@
 
 (define interval-union
   (lambda (i1 i2)
-    (if (interval-intersects? (i1 i2))
-        (if (< car(i1) car(i2)) define x car(i1)
-			define x car(i2))
+    (if (interval-intersects? i1 i2)
+        (let ([x(if (< (car i1) (car i2)) (car i1)
+			(car i2))]
         
-        (if( < cdr(i1) cdr(i2)) define y cdr(i1)
-			define y cdr(i2))
-         '(x y)
+        [y (if( < (cadr i1) (cadr i2)) (cadr i1)
+			(cadr i2))])
+         (list x y))
           
-    '(i1 i2))))   
+    (list i1 i2))))   
 
 (define divisible-by-7?
   (lambda (n)
@@ -32,7 +32,7 @@
 
 (define Ends-with-7?
   (lambda (n)
-    (if(eq? (modulo((- n 7) 10)) 0) #t
+    (if(eq? (modulo(- n 7) 10) 0) #t
      #f)))
 
 (define 1st
