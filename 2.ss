@@ -19,15 +19,15 @@
     
 (define set?
   (lambda (list)
-    [cond ((null? list) #t)
-          ((contains? cdr(list) car(list)) #f)
-          (else set? cdr(list))]))
+    (cond [(null? list) #t]
+          [(contains? cdr(list) car(list)) #f]
+          [else set? cdr(list)])))
 
 (define contains?
   (lambda (list n)
-    [cond ((null? list) #f)
-          (= n car(list) #t)
-          (else contains? cdr(list) n)]))
+    (cond [(null? list) #f]
+          [eq? n car(list) #t]
+          [else contains? cdr(list) n]))))
     
 (define sum-of-squares
   (lambda (lon)
