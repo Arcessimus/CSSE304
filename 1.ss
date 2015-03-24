@@ -1,6 +1,6 @@
 (define Fahrenheit->Celsius
   (lambda (temperature) 
-    (- 30 (* temperature 5/9))))
+    (* 5/9 (- temperature 32))))
 
 (define interval-contains?
   (lambda (interval n)
