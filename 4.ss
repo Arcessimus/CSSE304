@@ -1,4 +1,16 @@
 ;problem 1
+(define contains?
+	(lambda (lst obj)
+		(cond [(null? lst) #f]
+			[(equal? (car lst) obj) #t]
+			[else (contains? (cdr lst) obj)])))
+			
+(define set?
+  (lambda (list)
+    (cond [(null? list) #t]
+          [(contains? (cdr list) (car list)) #f]
+          [else (set? (cdr list))])))
+		  
 (define 2list?
 	(lambda (lst)
 		(cond [(null? lst) #f]
@@ -8,8 +20,9 @@
 			
 (define check-element
 	(lambda (obj)
-		(cond [(not (symbol? (car lst))) #f]
-			[(not (integer? (cadr lst))) #f]
+		(cond [(not (symbol? (car obj))) #f]
+			[(not (integer? (cadr obj))) #f]
+			[(< (cadr obj) 0) #f]
 			[else #t])))
 			
 (define check-elements
@@ -23,6 +36,7 @@
 		(cond [(null? obj) #t]
 			[(not (list? obj)) #f]
 			[(not (andmap 2list? obj)) #f]
+			[(not (set? (map car obj))) #f]
 			[else (check-elements obj)])))
 			
 ;problem 2
@@ -55,6 +69,7 @@
 (define correct-sublists?
 	(lambda (list-of-sublists)
 		(cond [(null? list-of-sublists) #t]
+			[(not (list? (car list-of-sublists))) #f]
 			[(null? (car list-of-sublists)) #f]
 			[(list-of-numbers? (car list-of-sublists)) (correct-sublists? (cdr list-of-sublists))])))
 			
@@ -67,7 +82,7 @@
 (define equal-lengths?
 	(lambda (list-of-sublists)
 		(let ([list-of-lengths (map length list-of-sublists)]
-			[comp-length (car list-of-lengths)])
+			[comp-length (length (car list-of-sublists))])
 			(check-lengths comp-length (cdr list-of-lengths)))))
 			
 (define matrix?
@@ -75,16 +90,27 @@
 		(cond [(null? obj) #f]
 			[(not (list? obj)) #f]
 			[(not (correct-sublists? obj)) #f]
+			[(eq? (length obj) 1) #t]
 			[(not (equal-lengths? obj)) #f]
 			[else #t])))
   
 ;problem 5
+(define matrix-car
+	(lambda (m)
+		(map car m)))
+	
+(define matrix-cdr
+	(lambda (m)
+		(map cdr m)))
+
 (define matrix-transpose-helper
 	(lambda (oldm newm)
-		(cond [(not (matrix? oldm))])))
+		(cond [(not (matrix? oldm)) newm]
+			[else (matrix-transpose-helper (matrix-cdr oldm) (append newm (list(matrix-car oldm))))])))
+			
 (define matrix-transpose
 	(lambda (m)
-		))
+		(matrix-transpose-helper m '())))
   
 ;problem 6
 (define last
@@ -96,9 +122,9 @@
 (define all-but-last-helper
 	(lambda (lst all-so-far)
 		(cond[(null? (cdr lst)) all-so-far]
-			[else (all-but-last-helper (cdr lst) (append (list (car lst)) all-so-far))])))
+			[else (all-but-last-helper (cdr lst) (append all-so-far (list (car lst))))])))
 			
 (define all-but-last
 	(lambda (lst)
 		(cond [(null? (cdr lst)) '()]
-			[else (all-but-last-helper (cdr lst) (car lst))])))
+			[else (all-but-last-helper (cdr lst) (list(car lst)))])))
