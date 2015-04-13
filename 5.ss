@@ -19,9 +19,24 @@
 			#f)))		
 			
 ;problem 4
+(define choose
+  (lambda (n k)
+    (/ (fact n) (* (fact k) (fact(- n k))))))
+
+(define make-triangle-row
+	(lambda (n k row)
+		(if (< n 0) row
+			(make-triangle-row n (+ k 1) (append row (list (choose n k)))))))
+
+(define pascal-accum
+	(lambda (n triangle-so-far)
+		(if (zero? n) (append triangle-so-far (list 1))
+			(pascal-accum (- n 1) (append triangle-so-far (make-triangle-row n 0 '()))))))
+
 (define pascal-triangle
 	(lambda (n)
-		))
+		(if (< n 0) '()
+			(pascal-accum n '()))))
 	
 ;problem 5
 (define make-pairs
@@ -44,8 +59,19 @@
 		/ (* n (- n 1)) 2))
 		
 ;problem 7
-;(define complete?
-	;(lambda (G)))
+(define make-list-of-vertices
+	(lambda (G)
+		(map car G)))
+		
+(define complete-helper
+	(lambda (G list-of-vertices)
+		))
+
+(define complete?
+	(lambda (G)
+		(cond [(null? G) #t]
+			[(eq? (length G) 1) #t]
+			[else (complete-helper G (make-list-of-vertices G))])))
 	
 ;problem 8
 ;(define complete?
@@ -60,8 +86,17 @@
 	(lambda (element ls)
 		(cond [(null? ls) ls]
 			[(eq? (car ls) element) (append (cdr ls) '())]
-			[else (append (remove-first element (cdr ls)) (list (car ls)))])))
+			[else (append (list (car ls)) (remove-first element (cdr ls)))])))
 	
 ;problem 11
-;(define remove-last
-	;(lambda (element ls)))
+(define contains?
+	(lambda (lst obj)
+		(cond [(null? lst) #f]
+			[(equal? (car lst) obj) #t]
+			[else (contains? (cdr lst) obj)])))
+			
+(define remove-last
+	(lambda (element ls)
+		(cond [(null? ls) ls]
+			[(and(eq? (car ls) element) (not(contains? (cdr ls) element))) (append (cdr ls) '())]
+			[else (append (list (car ls)) (remove-last element (cdr ls)))])))
