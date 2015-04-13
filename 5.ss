@@ -41,7 +41,7 @@
 
 (define minimize-interval-list
 	(lambda (ls)
-		('())))
+		'()))
 
 	
 ;problem 2
@@ -73,8 +73,8 @@
 
 (define make-triangle-row
 	(lambda (n k row)
-		(if (< n 0) row
-			(make-triangle-row n (+ k 1) (append row (list (choose n k)))))))
+		(if (eq? n k) row
+			(make-triangle-row n (+ k 1) (list row (list (choose n k)))))))
 
 (define pascal-accum
 	(lambda (n triangle-so-far)
@@ -90,7 +90,7 @@
 (define make-pairs
 	(lambda (element set)
 		(cond [(null? set) '()]
-			[else (append (make-pairs element (cdr set)) (list element (car set)))])))
+			[else (list (make-pairs element (cdr set)) (list element (car set)))])))
 			
 (define product-help
 	(lambda (set1 set2 product-so-far)
