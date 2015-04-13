@@ -19,8 +19,9 @@
 			#f)))		
 			
 ;problem 4
-;(define pascal-triangle
-	;(lambda (n)))
+(define pascal-triangle
+	(lambda (n)
+		))
 	
 ;problem 5
 (define make-pairs

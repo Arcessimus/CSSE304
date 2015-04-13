@@ -104,7 +104,7 @@
 (define reflexive-helper
 	(lambda (rel list-of-pairs)
 		(cond [(null? rel) #t]
-			[(contains? list-of-pairs (car rel)) (reflexive-helper (cdr rel) (list-of-pairs))]
+			[(contains? list-of-pairs (car rel)) (reflexive-helper (cdr rel) list-of-pairs)]
 			[(not (contains? list-of-pairs (list (caar rel) (caar rel)))) #f]
 			[(not (contains? list-of-pairs (list (cadar rel) (cadar rel)))) #f] 
 			[else (reflexive-helper (cdr rel) list-of-pairs)])))
