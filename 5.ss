@@ -32,12 +32,17 @@
 		(cond [(null? ls) original-list]
 		[(interval-intersects? interval (car ls)) (append (interval-union interval (car ls)) (remove (car ls) (remove interval original-list)))]
 		[else (reduce-list interval (cdr ls) original-list)])))
+		
+(define minimize-accum
+	(lambda (ls minimized-list)
+		(cond [(null? ls) ls]
+			[(intersection-exists? (car ls) (cdr ls)) (minimize-accum ls (append (reduce-list (car ls) (cdr ls) ls) minimized-list))]
+			[else (minimize-interval-list (cdr ls))])))
 
 (define minimize-interval-list
 	(lambda (ls)
-		(cond [(null? ls) '()]
-			[(intersection-exists? (car ls) (cdr ls)) (minimize-interval-list (reduce-list (car ls) (cdr ls) ls))]
-			[else (minimize-interval-list (cdr ls))])))
+		('())))
+
 	
 ;problem 2
 (define exists?
@@ -56,6 +61,12 @@
 			#f)))		
 			
 ;problem 4
+(define fact
+  (lambda (n)
+    (if (zero? n)
+        1
+        (* n (fact (- n 1))))))
+		
 (define choose
   (lambda (n k)
     (/ (fact n) (* (fact k) (fact(- n k))))))
@@ -107,7 +118,7 @@
 			[else 
 			(let ([G2 (remove (list vertex connections) G)]
 				[next-vertex (car connections)]
-				[next-connections (remove vertex (cdr (find (equal? (caar G) (car connections)))))]
+				[next-connections (remove vertex (cdr (find (equal? (caar G) (car connections)) connections)))]
 				[remaining-vertices (remove vertex (remove connections list-of-vertices))])
 				(full-connection? G2 next-vertex next-connections remaining-vertices))])))
 		
@@ -118,9 +129,9 @@
 			[else 
 			(let ([G2 (remove (list vertex connections) G)]
 				[next-vertex (car connections)]
-				[next-connections (remove vertex (cdr (find (equal? (caar G) (car connections)))))]
+				[next-connections (remove vertex (cdr (find (equal? (caar G) (car connections)) connections)))]
 				[remaining-vertices (remove vertex (remove connections list-of-vertices))])
-				(if (not full-connection? G2 next-vertex next-connections remaining-vertices) #f
+				(if (not (full-connection? G2 next-vertex next-connections remaining-vertices)) #f
 					(check-connections G (caadr G) (cdadr G) list-of-vertices)))])))
 		
 (define complete-helper
@@ -143,7 +154,7 @@
 
 (define complete
 	(lambda (ls)
-		(cond [(null?) '()]
+		(cond [(null? ls) '()]
 		[else (complete-accum ls ls '())])))
 	
 ;problem 9
@@ -167,7 +178,7 @@
 			[(eq? (car ls) element) (append (cdr ls) '())]
 			[else (append (list (car ls)) (remove-first element (cdr ls)))])))
 	
-;problem 11			
+;problem 11
 (define remove-last
 	(lambda (element ls)
 		(cond [(null? ls) ls]
