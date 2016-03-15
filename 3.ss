@@ -88,3 +88,110 @@
 		(if (or (null? s1) (null? s2))
 			'()
 			(intersection-helper s1 s2 '()))))
+			
+;4
+(define subset?
+	(lambda (s1 s2)
+		(if (null? s1)
+			#t
+			(if (not (set-contains? (car s1) s2))
+				#f
+				(subset? (cdr s1) s2)))))
+				
+;5
+(define set?
+	(lambda (ls)
+		(cond
+			[(not (list? ls)) #f]
+			[(null? ls) #t]
+			[(set-contains? (car ls) (cdr ls)) #f]
+			[else (set? (cdr ls))])))
+			
+(define list-size
+	(lambda (ls cur-size)
+		(if (null? ls)
+			cur-size
+			(list-size (cdr ls) (+ 1 cur-size)))))
+			
+(define list-of-2-lists?
+	(lambda (ls)
+		(cond
+			[(null? ls) #t]
+			[(not (list? (car ls))) #f]
+			[(not (equal? (list-size (car ls) 0) 2)) #f]
+			[else (list-of-2-lists? (cdr ls))])))
+			
+(define relation?
+	(lambda (ls)
+		(cond
+			[(not (list? ls)) #f]
+			[(not (set? ls)) #f]
+			[(not (list-of-2-lists? ls)) #f]
+			[else #t])))
+			
+;6
+(define domain-acc
+	(lambda (ls acc)
+		(cond
+			[(null? ls) acc]
+			[(set-contains? (caar ls) acc) (domain-acc (cdr ls) acc)]
+			[else (domain-acc (cdr ls) (cons (caar ls) acc))])))
+			
+(define domain
+	(lambda (ls)
+		(if (null? ls)
+			'()
+			(domain-acc ls '()))))
+			
+;7 - did check old code for hint
+(define reflexive-pair?
+	(lambda (lst)
+		(equal? (car lst) (cadr lst)))) ;from old code
+		
+(define get-list-of-pairs
+	(lambda (rel list-of-pairs)
+		(cond [(null? rel) list-of-pairs]
+			[(reflexive-pair? (car rel)) (get-list-of-pairs (cdr rel)(append (list (car rel)) list-of-pairs))]
+			[else (get-list-of-pairs (cdr rel) list-of-pairs)]))) ;from old code
+			
+(define domain-in-reflexive-pairs
+	(lambda (set-domain possible)
+		(cond
+			[(null? set-domain) #t]
+			[(set-contains? (car set-domain) possible) (domain-in-reflexive-pairs (cdr set-domain) possible)]
+			[else #f])))
+			
+(define range-acc
+	(lambda (ls acc)
+		(cond
+			[(null? ls) acc]
+			[(set-contains? (cadar ls) acc) (range-acc (cdr ls) acc)]
+			[else (range-acc (cdr ls) (cons (cadar ls) acc))])))
+			
+(define range
+	(lambda (ls)
+		(if (null? ls)
+			'()
+			(range-acc ls '()))))
+		
+(define reflexive?
+	(lambda (ls)
+		(cond
+			[(null? ls) #t]
+			[(not (domain-in-reflexive-pairs (domain ls) (map car (get-list-of-pairs ls '())))) #f]
+			[(not (domain-in-reflexive-pairs (range ls) (map car (get-list-of-pairs ls '())))) #f]
+			[else #t])))
+			
+;8
+(define hailstone-step-count-acc
+	(lambda (n acc)
+		(cond
+			[(<= n 1) acc]
+			[(eq? (modulo n 2) 0) (hailstone-step-count-acc (/ n 2) (+ acc 1))]
+			[else (hailstone-step-count-acc (+ (* n 3) 1) (+ acc 1))])))
+			
+(define hailstone-step-count
+	(lambda (n)
+		(if (<= n 1)
+			0
+			(hailstone-step-count-acc n 0))))
